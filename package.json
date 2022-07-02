@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +15,8 @@
     "nodemailer": "^6.7.6",
     "telebot": "^1.4.1",
     "yup": "^0.32.11"
+  },
+  "engines": {
+    "node": ">=0.10.3 <15"
   }
 }
