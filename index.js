@@ -42,7 +42,7 @@ bot.on(['/start', '/menu'], function (msg) {
     let id = msg.from.id;
 
     //Muestra el mensaje al usuario junto a los botones definidos
-    return bot.sendMessage(id, `<b>Bienvenid@ a nuestra tienda!</b>\n\nSelecciona alguna de las siguientes opciones:`, { parseMode: 'html', replyMarkup });
+    return bot.sendMessage(id, `<b>Bienvenid@ al Bot de nuestra tienda!🛍️</b>\n\nSelecciona alguna de las siguientes opciones:`, { parseMode: 'html', replyMarkup });
 });
 
 
@@ -64,7 +64,7 @@ bot.on('/showProducts', function (msg) {
             let result = await getInfoProducts();
 
             //Muestra el mensaje al usuario junto a los botones definidos
-            return bot.sendMessage(msg.from.id, `<b>LISTA DE PRODUCTOS:</b>\n\n${result}`, { parseMode: 'html', replyMarkup });
+            return bot.sendMessage(msg.from.id, `<b>LISTA DE PRODUCTOS:📃</b>\n\n${result}`, { parseMode: 'html', replyMarkup });
 
         } catch (error) {
             log(error);
@@ -99,7 +99,7 @@ bot.on('ask.writtenId', function (msg) {
     let writtenId = areValidNumbers(msg.text);
 
     if(!writtenId) {
-        return bot.sendMessage(id, 'El valor ingresado no es válido. Inténtelo de nuevo.', { ask: 'writtenId' });
+        return bot.sendMessage(id, 'El valor ingresado no es válido. Inténtelo de nuevo.❌', { ask: 'writtenId' });
     }
 
     async function searchProduct() {
@@ -128,7 +128,7 @@ bot.on('/cart', function (msg) {
     //Se crea el carrito con el id del usuario
     createCart(id); 
 
-    return bot.sendMessage(id, '¿Qué productos deseas agregar al carrito?\n\n<i>Coloca el id o los id de los productos que deseas agregar a tu carrito\nEj: 1, 2, 2, 5, 9</i>', {ask: 'cartProducts', parseMode: 'html'});
+    return bot.sendMessage(id, '¿Qué productos deseas agregar al carrito? 🛒 \n\n<i>Coloca el id o los id de los productos que deseas agregar a tu carrito\nEj: 1, 2, 2, 5, 9</i>', {ask: 'cartProducts', parseMode: 'html'});
 });
 
 bot.on('ask.cartProducts', function (msg) {
@@ -147,13 +147,13 @@ bot.on('ask.cartProducts', function (msg) {
             let validProducts = areValidNumbers(text);
 
             if(!validProducts) {
-                return bot.sendMessage('Ingresaste un valor inválido. Inténtalo de nuevo.', {ask: 'cartProducts'});
+                return bot.sendMessage('Ingresaste un valor inválido. Inténtalo de nuevo.❌', {ask: 'cartProducts'});
             }  else {
 
                 //Agrega los productos al carrito
                 await addToCart(id, validProducts);
 
-                return bot.sendMessage(id, 'Los productos fueron agregados al carrito con éxito.\n\n<i>¿En qué otra cosa te puedo ayudar?</i>', { replyMarkup , parseMode: 'html'});
+                return bot.sendMessage(id, 'Los productos fueron agregados al carrito con éxito ✅.\n\n<i>¿En qué otra cosa te puedo ayudar?</i>', { replyMarkup , parseMode: 'html'});
 
             }  
 
@@ -171,7 +171,7 @@ bot.on('ask.cartProducts', function (msg) {
 bot.on('/addMore', function (msg) {
     
     let id = msg.from.id;
-    return bot.sendMessage(id, '¿Qué otros productos deseas ingresar al carrito?\n\n<i>Coloca el id o los id de los productos que deseas agregar a tu carrito\nEj: 1, 2, 2, 5, 9</i>', {ask: 'moreProducts', parseMode: 'html'});
+    return bot.sendMessage(id, '¿Qué otros productos deseas ingresar al carrito? 🛒\n\n<i>Coloca el id o los id de los productos que deseas agregar a tu carrito\nEj: 1, 2, 2, 5, 9</i>', {ask: 'moreProducts', parseMode: 'html'});
 });
 
 bot.on('ask.moreProducts', function (msg) {
@@ -192,13 +192,13 @@ bot.on('ask.moreProducts', function (msg) {
             let validProducts = areValidNumbers(text);
 
             if(!validProducts) {
-                return bot.sendMessage('Ingresaste un valor inválido. Inténtalo de nuevo.', {ask: 'cartProducts'});
+                return bot.sendMessage('Ingresaste un valor inválido. Inténtalo de nuevo.❌', {ask: 'cartProducts'});
             }  else {
 
                 //Agrega los productos al carrito
                 await addMoreToCart(id, validProducts);
 
-                return bot.sendMessage(id, 'Los productos fueron agregados al carrito con éxito.\n\n<i>¿En qué otra cosa te puedo ayudar?</i>', { replyMarkup , parseMode: 'html'});
+                return bot.sendMessage(id, 'Los productos fueron agregados al carrito con éxito. ✅\n\n<i>¿En qué otra cosa te puedo ayudar?</i>', { replyMarkup , parseMode: 'html'});
 
             } 
 
@@ -221,7 +221,7 @@ bot.on('/viewCart', function (msg) {
 
     let id = msg.from.id;
 
-    bot.sendMessage(id, '<i>Tomando la información del carrito...</i>', { parseMode: 'html' });
+    bot.sendMessage(id, '<i>Tomando la información del carrito...</i> ⏱', { parseMode: 'html' });
 
     async function verCarrito() {
 
@@ -235,10 +235,10 @@ bot.on('/viewCart', function (msg) {
                     [ btn('Mostrar productos', { callback: '/showProducts' }), btn('Volver al menu', { callback: '/menu' }) ]
                 ]);
 
-                return bot.sendMessage(id, "Disculpe, no ha ingresado productos a su carrito.\n\nPara hacerlo, seleccione la opción 'Mostrar productos' y agregue productos a su carrito.", { replyMarkup });
+                return bot.sendMessage(id, "Disculpe, no ha ingresado productos a su carrito. ❌\n\nPara hacerlo, seleccione la opción 'Mostrar productos' y agregue productos a su carrito.", { replyMarkup });
             }
 
-            return bot.sendMessage(id, `<b>CARRITO</b>\n\n${ res }`, { replyMarkup, parseMode: 'html' });
+            return bot.sendMessage(id, `<b>SU CARRITO DE COMPRAS</b> 🛒\n\n${ res }`, { replyMarkup, parseMode: 'html' });
 
         } catch (err) {
             log(err);
@@ -257,8 +257,8 @@ bot.on('/facturar', function (msg) {
 
     let message = 'Ingrese su nombre, apellido, correo electrónico, ubicación y método de pago después de leer el mensaje.\n\n' +
                   'Para la ubicación y el método de pago, solo debe ingresar el número correspondiente de la lista\n\n' +
-                  '<b>ZONAS DE DELIVERY</b>\n1) Foozik\n2) Barqux\n3) Octohall\n4) Quzik\n\n' +
-                  '<b>MÉTODOS DE PAGO</b>\n1) Efectivo\n2) Transferencia\n3) BTC\n4) ETH\n5) USDT\n\n' +
+                  '<b>ZONAS DE DELIVERY</b> 🚲\n1) Foozik\n2) Barqux\n3) Octohall\n4) Quzik\n\n' +
+                  '<b>MÉTODOS DE PAGO</b> 💸\n1) Efectivo\n2) Transferencia\n3) BTC\n4) ETH\n5) USDT\n\n' +
                   '<i>Ej: Foo, Zik, foozik@foo.com, 3, 2\nEs importante que separe con coma los datos.</i>'
 
     return bot.sendMessage(id, `${ message }`, { parseMode: 'html', ask: 'userDetails' });
@@ -281,7 +281,7 @@ bot.on('ask.userDetails', function (msg) {
         let details = await validateDetails(text);
 
         if(!details) {
-            return bot.sendMessage(id, "Disculpe, ingresó datos inválidos. Inténtelo de nuevo, recuerde seguir el ejemplo dado.", { ask: 'userDetails' });
+            return bot.sendMessage(id, "Disculpe, ingresó datos inválidos. ❌ \nInténtelo de nuevo, recuerde seguir el ejemplo dado.", { ask: 'userDetails' });
         } else {
 
             try {
@@ -296,7 +296,7 @@ bot.on('ask.userDetails', function (msg) {
                 log(err)
             }
 
-            return bot.sendMessage(id, 'Los datos han sido agregados con éxito.\n\nSe ha enviado un correo a su cuenta con la factura de compra. Recuerda revisar tu carpeta de spam si no te aparece.\n\nMuchas gracias por preferirnos!', { replyMarkup });
+            return bot.sendMessage(id, 'Los datos han sido agregados con éxito. ✅\n\nSe ha enviado un correo a su cuenta con la factura de compra. Recuerda revisar tu carpeta de spam si no te aparece.\n\nMuchas gracias por preferirnos!', { replyMarkup });
         }
 
     }userDetails();
@@ -309,7 +309,7 @@ bot.on('ask.userDetails', function (msg) {
 bot.on('/listPayment', function (msg) {
 
     let id = msg.from.id;
-    let message = '<b>Nuestros métodos de pago aceptados son:</b>\n\n' +
+    let message = '<b>Nuestros métodos de pago aceptados son: 💸</b>\n\n' +
         '- Efectivo\n- Transferencia\n- Crypto:\n     - BTC\n     - ETH\n     - USDT';
 
     return bot.sendMessage(id, `${message}`, { parseMode: 'html' });
@@ -326,7 +326,7 @@ bot.on('/delivery', function (msg) {
 
     let id = msg.from.id;
 
-    let message = '<b>NUESTRAS ZONAS DE DELIVERY</b>\n\n- Foozik\n- Barqux\n- Octohall\n- Quzik\n\n' +
+    let message = '<b>NUESTRAS ZONAS DE DELIVERY 🚲</b>\n\n- Foozik\n- Barqux\n- Octohall\n- Quzik\n\n' +
                   '<b>HORARIOS DE ATENCIÓN</b>\n\nTodos los días 8:00 AM a 9:00 PM\n\n' +
                   '<i>Estamos para servirte!</i>'
 
