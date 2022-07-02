@@ -296,7 +296,7 @@ bot.on('ask.userDetails', function (msg) {
                 log(err)
             }
 
-            return bot.sendMessage(id, 'Los datos han sido agregados con éxito.\n\nSe ha enviado un correo a su cuenta con la factura de compra.\n\nMuchas gracias por preferirnos!', { replyMarkup });
+            return bot.sendMessage(id, 'Los datos han sido agregados con éxito.\n\nSe ha enviado un correo a su cuenta con la factura de compra. Recuerda revisar tu carpeta de spam si no te aparece.\n\nMuchas gracias por preferirnos!', { replyMarkup });
         }
 
     }userDetails();
@@ -320,9 +320,17 @@ bot.on('/listPayment', function (msg) {
 
 bot.on('/delivery', function (msg) {
 
+    let replyMarkup = bot.inlineKeyboard([
+        [btn('Volver al menu', { callback: '/menu' })]
+    ]);
+
     let id = msg.from.id;
 
-    return bot.sendMessage(id, '<b>Nuestras zonas de delivery disponibles:</b>', { parseMode: 'html' });
+    let message = '<b>NUESTRAS ZONAS DE DELIVERY</b>\n\n- Foozik\n- Barqux\n- Octohall\n- Quzik\n\n' +
+                  '<b>HORARIOS DE ATENCIÓN</b>\n\nTodos los días 8:00 AM a 9:00 PM\n\n' +
+                  '<i>Estamos para servirte!</i>'
+
+    return bot.sendMessage(id, `${ message }`, { parseMode: 'html', replyMarkup });
 });
 
 bot.on('callbackQuery', (msg) => {
