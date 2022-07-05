@@ -1,6 +1,8 @@
+require('dotenv').config();
+
 const {MongoClient} = require('mongodb');
 
-let url = 'mongodb+srv://dbtest:admin123@dbtest.fdebyxm.mongodb.net/?retryWrites=true&w=majority';
+let url = process.env.URL_MONGO;
 
 async function connectDB() {
     const client = new MongoClient(url);
