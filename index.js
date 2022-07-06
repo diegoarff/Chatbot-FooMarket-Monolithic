@@ -19,6 +19,7 @@ const sendMail = require('./functions_bot/sendMail');
 const viewCart = require('./functions_bot/viewCart');
 const validateDetails = require('./functions_bot/validateDetails');
 const deleteProducts = require('./functions_bot/deleteProducts');
+const getTotalAmount = require('./functions_bot/getTotalAmount');
 
 let TOKEN = process.env.TOKEN_TELEGRAM;
 
