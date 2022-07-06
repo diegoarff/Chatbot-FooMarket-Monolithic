@@ -1,4 +1,4 @@
-let { API_DB, ENDPOINTS_CARTS } = require('~ins');
+const { API_DB, ENDPOINTS_CARTS } = require("../config/instance");
 
 async function getTotalAmount(userId) {
 
