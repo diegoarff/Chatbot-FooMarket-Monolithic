@@ -305,7 +305,7 @@ bot.on('ask.userDetails', function (msg) {
                         title: 'Pago 💳',
                         description: 'Tarjeta Mastercard/VISA',
                         payload: 'telebot-test-invoice',
-                        providerToken: '284685063:TEST:YjZmZjViYjJmYzk0',
+                        providerToken: '5322214758:TEST:df58316a-2504-4ed9-b037-0010e5a851b9',
                         startParameter: 'pay',
                         currency: 'USD',
                         prices: [ { label: 'Monto total', amount: total_amount } ],
