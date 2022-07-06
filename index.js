@@ -10,8 +10,7 @@ const { API_DB, ENDPOINTS_CARTS } = require('./config/instance');
 const { btn, log } = require('./utils/utils');
 
 //Funciones creadas
-const addMoreToCart = require('./functions_bot/addMoreToCart');
-const addToCart = require('./functions_bot/addToCart');
+const addProducts = require('./functions_bot/addProducts');
 const areValidNumbers = require('./functions_bot/areValidNumbers');
 const createCart = require('./functions_bot/createCart');
 const getInfoProductId = require('./functions_bot/getInfoProductId');
@@ -19,6 +18,7 @@ const getInfoProducts = require('./functions_bot/getInfoProducts');
 const sendMail = require('./functions_bot/sendMail');
 const viewCart = require('./functions_bot/viewCart');
 const validateDetails = require('./functions_bot/validateDetails');
+const deleteProducts = require('./functions_bot/deleteProducts');
 
 let TOKEN = process.env.TOKEN_TELEGRAM;
 
@@ -134,14 +134,14 @@ bot.on('/cart', function (msg) {
 bot.on('ask.cartProducts', function (msg) {
 
     let replyMarkup = bot.inlineKeyboard([
-        [ btn('Agregar más productos', { callback: '/addMore'}) ],
+        [ btn('Agregar más productos', { callback: '/addMore'}),btn('Eliminar productos', { callback: '/deleteFromCart'}) ],
         [ btn('Ver carrito', { callback : '/viewCart'}), btn('Volver al menu', { callback: '/menu' })  ]
     ]);
 
     let id = msg.from.id;
     let text = msg.text; 
 
-    async function addProducts(){
+    async function addProductsCart(){
         try {
 
             let validProducts = areValidNumbers(text);
@@ -151,7 +151,7 @@ bot.on('ask.cartProducts', function (msg) {
             }  else {
 
                 //Agrega los productos al carrito
-                await addToCart(id, validProducts);
+                await addProducts(id, validProducts);
 
                 return bot.sendMessage(id, 'Los productos fueron agregados al carrito con éxito ✅.\n\n<i>¿En qué otra cosa te puedo ayudar?</i>', { replyMarkup , parseMode: 'html'});
 
@@ -161,7 +161,7 @@ bot.on('ask.cartProducts', function (msg) {
             log(err)
         }
 
-    }addProducts();
+    }addProductsCart();
 
 });
 
@@ -177,7 +177,7 @@ bot.on('/addMore', function (msg) {
 bot.on('ask.moreProducts', function (msg) {
 
     let replyMarkup = bot.inlineKeyboard([
-        [ btn('Agregar más productos', { callback: '/addMore'}) ],
+        [ btn('Agregar más productos', { callback: '/addMore'}), btn('Eliminar productos', { callback: '/deleteFromCart'})],
         [ btn('Ver carrito', { callback : '/viewCart'}), btn('Volver al menu', { callback: '/menu' })  ]
     ]);
 
@@ -196,7 +196,7 @@ bot.on('ask.moreProducts', function (msg) {
             }  else {
 
                 //Agrega los productos al carrito
-                await addMoreToCart(id, validProducts);
+                await addProducts(id, validProducts);
 
                 return bot.sendMessage(id, 'Los productos fueron agregados al carrito con éxito. ✅\n\n<i>¿En qué otra cosa te puedo ayudar?</i>', { replyMarkup , parseMode: 'html'});
 
@@ -209,13 +209,53 @@ bot.on('ask.moreProducts', function (msg) {
     }addMore();
 });
 
+bot.on('/deleteFromCart', function (msg) {
+    
+    let id = msg.from.id;
+    return bot.sendMessage(id, '¿Qué productos deseas eliminar de tu carrito? 🛒\n\n<i>Coloca el id o los id de los productos que deseas eliminar de tu carrito\nEj: 1, 2, 2, 5, 9</i>', {ask: 'deleteCartProducts', parseMode: 'html'});
+});
+bot.on('ask.deleteCartProducts', function (msg) {
+
+    let replyMarkup = bot.inlineKeyboard([
+        [ btn('Agregar más productos', { callback: '/addMore'}),btn('Eliminar productos', { callback: '/deleteFromCart'}) ],
+        [ btn('Ver carrito', { callback : '/viewCart'}), btn('Volver al menu', { callback: '/menu' })  ]
+    ]);
+
+    let id = msg.from.id;
+    let text = msg.text; 
+
+    async function deleteProductsCart(){
+        try {
+
+            let validProducts = areValidNumbers(text);
+
+            if(!validProducts) {
+                return bot.sendMessage('Ingresaste un valor inválido. Inténtalo de nuevo.❌', {ask: 'deleteCartProducts'});
+            }  else {
+
+                //Agrega los productos al carrito
+                await deleteProducts(id, validProducts);
+
+                return bot.sendMessage(id, 'Los productos fueron eliminados del carrito con éxito ✅.\n\n<i>¿En qué otra cosa te puedo ayudar?</i>', { replyMarkup , parseMode: 'html'});
+
+            }  
+
+        } catch (err) {
+            log(err)
+        }
+
+    }deleteProductsCart();
+
+});
+
+
 
 //VER CARRITO
 
 bot.on('/viewCart', function (msg) {
 
     let replyMarkup = bot.inlineKeyboard([
-        [ btn('Agregar más productos', { callback: '/addMore'}) ],
+        [ btn('Agregar más productos', { callback: '/addMore'}), btn('Eliminar productos', { callback: '/deleteFromCart'}) ],
         [ btn('Facturar', { callback: '/facturar'}), btn('Volver al menu', { callback: '/menu' }) ]
     ]);
 
@@ -267,41 +307,102 @@ bot.on('/facturar', function (msg) {
 
 bot.on('ask.userDetails', function (msg) {
 
-    let replyMarkup = bot.inlineKeyboard([
-        [ btn('Volver al menu', { callback: '/menu' }) ]
-    ]);
-
     let id = msg.from.id;
     let text = msg.text;
-
-    bot.sendMessage(id, `<i>Registrando información...</i>`, { parseMode: 'html' });
 
     async function userDetails() {
 
         let details = await validateDetails(text);
 
         if(!details) {
-            return bot.sendMessage(id, "Disculpe, ingresó datos inválidos. ❌ \nInténtelo de nuevo, recuerde seguir el ejemplo dado.", { ask: 'userDetails' });
-        } else {
+            return bot.sendMessage(id, "❌ Ingresaste valores invalidos. Intentalo de nuevo, recuerda el ejemplo.\n\n <i>Ej: Foo, Zik, foozik6@foo.com, 1, 4\n\nPresta atencion a las comas.❕</i>", { parseMode: 'html', once: true, ask: 'userDetails' });
+        } 
+        
+        else {
 
             try {
 
+                // Se actualizan los datos del usuario
                 await API_DB.put(ENDPOINTS_CARTS.PUT_USER_DETAILS+`?userId=${ id }`, details);
+                bot.sendMessage(id, `<i>Obteniendo informacion...</i>`, { parseMode: 'html' });
 
-                await sendMail(id);
-    
-                await API_DB.delete(ENDPOINTS_CARTS.DELETE_CART+`?userId=${ id }`);
 
-            } catch (err) {
+                // Se hace un condicional si utiliza el metodo de tarjeta                
+                if(details[4] == 4 ) {
+                    
+                    const inlineKeyboard = bot.inlineKeyboard([[bot.inlineButton('Paga con tarjeta!', {pay: true})]]);
+
+                    let total_amount;
+                    
+                    // Se toma el monto final del carrito
+                    total_amount = await getTotalAmount(id);
+
+                    // Se transforma a numero y se multiplica por 100 (debido a la funcion de payment de Telegram que lo divide entre 100)
+                    total_amount = Number(total_amount) * 100;
+
+                    // Se crea el mensaje para el payment (se usa el ejemplo del teleb)
+                    bot.sendInvoice(msg.from.id, {
+                        title: 'Pago 💳',
+                        description: 'Tarjeta Mastercard/VISA',
+                        payload: 'telebot-test-invoice',
+                        providerToken: '5322214758:TEST:df58316a-2504-4ed9-b037-0010e5a851b9',
+                        startParameter: 'pay',
+                        currency: 'USD',
+                        prices: [ { label: 'Monto total', amount: total_amount } ],
+                        replyMarkup: inlineKeyboard
+                    })
+
+                    bot.on('preShippingQuery', (msg) => {
+                        const id = msg.id;
+                        const isOk = true;
+                        return bot.answerPreCheckoutQuery(id, isOk);
+                    });
+                
+                    bot.on('successfulPayment', (msg) => {
+                        let replyMarkup = bot.inlineKeyboard([
+                            [btn('Finalizar y enviar el email con la factura ✉️', { callback : '/email'})]
+                        ]);
+                        return bot.sendMessage(msg.from.id, `Gracias por su compra, ${msg.from.first_name}!`, { replyMarkup });
+                
+                    });
+
+                }
+
+                else {
+
+                    let replyMarkup = bot.inlineKeyboard([
+                        [btn('Finalizar y enviar el email con la factura ✉️', { callback : '/email'})]
+                    ]);
+                    return bot.sendMessage(msg.from.id, `Gracias por su compra, ${msg.from.first_name}!`, { replyMarkup });
+                }
+
+            } 
+            
+            catch (err) {
                 log(err)
             }
-
-            return bot.sendMessage(id, 'Los datos han sido agregados con éxito. ✅\n\nSe ha enviado un correo a su cuenta con la factura de compra. Recuerda revisar tu carpeta de spam si no te aparece.\n\nMuchas gracias por preferirnos!', { replyMarkup });
         }
 
     }userDetails();
+
+   
     
 });
+
+bot.on('/email', msg => {
+
+    let id = msg.from.id;
+
+    async function email() {
+
+        await sendMail(id);
+
+        await API_DB.delete(ENDPOINTS_CARTS.DELETE_CART+`?userId=${ id }`);
+
+    } email();
+
+    return bot.sendMessage(id, 'Te enviamos un correo con la factura.\n\nGracias por elegirnos! 🤖💌\n\nSi quieres hacer otra compra 🛍 envia /start',);
+})
 
 
 //VER MÉTODOS DE PAGO
