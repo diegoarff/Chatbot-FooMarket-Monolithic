@@ -16,7 +16,8 @@ const ENDPOINTS_CARTS = {
     POST_CART: '/postCart',
     PUT_USER_DETAILS: '/putUserDetails',
     PUT_TOTAL_AMOUNT: '/putTotalAmount',
-    DELETE_CART: '/deleteCart' 
+    DELETE_CART: '/deleteCart',
+    DELETE_CART_PRODUCTS: '/deleteProductsCart' 
 }
 
 module.exports = {

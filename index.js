@@ -19,6 +19,7 @@ const getInfoProducts = require('./functions_bot/getInfoProducts');
 const sendMail = require('./functions_bot/sendMail');
 const viewCart = require('./functions_bot/viewCart');
 const validateDetails = require('./functions_bot/validateDetails');
+const deleteProducts = require('./functions_bot/deleteProducts');
 
 let TOKEN = process.env.TOKEN_TELEGRAM;
 
@@ -134,7 +135,7 @@ bot.on('/cart', function (msg) {
 bot.on('ask.cartProducts', function (msg) {
 
     let replyMarkup = bot.inlineKeyboard([
-        [ btn('Agregar más productos', { callback: '/addMore'}) ],
+        [ btn('Agregar más productos', { callback: '/addMore'}),btn('Eliminar productos', { callback: '/deleteFromCart'}) ],
         [ btn('Ver carrito', { callback : '/viewCart'}), btn('Volver al menu', { callback: '/menu' })  ]
     ]);
 
@@ -177,7 +178,7 @@ bot.on('/addMore', function (msg) {
 bot.on('ask.moreProducts', function (msg) {
 
     let replyMarkup = bot.inlineKeyboard([
-        [ btn('Agregar más productos', { callback: '/addMore'}) ],
+        [ btn('Agregar más productos', { callback: '/addMore'}),  ],
         [ btn('Ver carrito', { callback : '/viewCart'}), btn('Volver al menu', { callback: '/menu' })  ]
     ]);
 
@@ -209,13 +210,53 @@ bot.on('ask.moreProducts', function (msg) {
     }addMore();
 });
 
+bot.on('/deleteFromCart', function (msg) {
+    
+    let id = msg.from.id;
+    return bot.sendMessage(id, '¿Qué productos deseas eliminar de tu carrito? 🛒\n\n<i>Coloca el id o los id de los productos que deseas eliminar de tu carrito\nEj: 1, 2, 2, 5, 9</i>', {ask: 'deleteCartProducts', parseMode: 'html'});
+});
+bot.on('ask.deleteCartProducts', function (msg) {
+
+    let replyMarkup = bot.inlineKeyboard([
+        [ btn('Agregar más productos', { callback: '/addMore'}),btn('Eliminar productos', { callback: '/deleteFromCart'}) ],
+        [ btn('Ver carrito', { callback : '/viewCart'}), btn('Volver al menu', { callback: '/menu' })  ]
+    ]);
+
+    let id = msg.from.id;
+    let text = msg.text; 
+
+    async function deleteProductsCart(){
+        try {
+
+            let validProducts = areValidNumbers(text);
+
+            if(!validProducts) {
+                return bot.sendMessage('Ingresaste un valor inválido. Inténtalo de nuevo.❌', {ask: 'deleteCartProducts'});
+            }  else {
+
+                //Agrega los productos al carrito
+                await deleteProducts(id, validProducts);
+
+                return bot.sendMessage(id, 'Los productos fueron eliminados del carrito con éxito ✅.\n\n<i>¿En qué otra cosa te puedo ayudar?</i>', { replyMarkup , parseMode: 'html'});
+
+            }  
+
+        } catch (err) {
+            log(err)
+        }
+
+    }deleteProductsCart();
+
+});
+
+
 
 //VER CARRITO
 
 bot.on('/viewCart', function (msg) {
 
     let replyMarkup = bot.inlineKeyboard([
-        [ btn('Agregar más productos', { callback: '/addMore'}) ],
+        [ btn('Agregar más productos', { callback: '/addMore'}), btn('Eliminar productos', { callback: '/deleteFromCart'}) ],
         [ btn('Facturar', { callback: '/facturar'}), btn('Volver al menu', { callback: '/menu' }) ]
     ]);
 
