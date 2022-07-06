@@ -10,8 +10,7 @@ const { API_DB, ENDPOINTS_CARTS } = require('./config/instance');
 const { btn, log } = require('./utils/utils');
 
 //Funciones creadas
-const addMoreToCart = require('./functions_bot/addMoreToCart');
-const addToCart = require('./functions_bot/addToCart');
+const addProducts = require('./functions_bot/addProducts');
 const areValidNumbers = require('./functions_bot/areValidNumbers');
 const createCart = require('./functions_bot/createCart');
 const getInfoProductId = require('./functions_bot/getInfoProductId');
@@ -142,7 +141,7 @@ bot.on('ask.cartProducts', function (msg) {
     let id = msg.from.id;
     let text = msg.text; 
 
-    async function addProducts(){
+    async function addProductsCart(){
         try {
 
             let validProducts = areValidNumbers(text);
@@ -152,7 +151,7 @@ bot.on('ask.cartProducts', function (msg) {
             }  else {
 
                 //Agrega los productos al carrito
-                await addToCart(id, validProducts);
+                await addProducts(id, validProducts);
 
                 return bot.sendMessage(id, 'Los productos fueron agregados al carrito con éxito ✅.\n\n<i>¿En qué otra cosa te puedo ayudar?</i>', { replyMarkup , parseMode: 'html'});
 
@@ -162,7 +161,7 @@ bot.on('ask.cartProducts', function (msg) {
             log(err)
         }
 
-    }addProducts();
+    }addProductsCart();
 
 });
 
@@ -178,7 +177,7 @@ bot.on('/addMore', function (msg) {
 bot.on('ask.moreProducts', function (msg) {
 
     let replyMarkup = bot.inlineKeyboard([
-        [ btn('Agregar más productos', { callback: '/addMore'}),  ],
+        [ btn('Agregar más productos', { callback: '/addMore'}), btn('Eliminar productos', { callback: '/deleteFromCart'})],
         [ btn('Ver carrito', { callback : '/viewCart'}), btn('Volver al menu', { callback: '/menu' })  ]
     ]);
 
@@ -197,7 +196,7 @@ bot.on('ask.moreProducts', function (msg) {
             }  else {
 
                 //Agrega los productos al carrito
-                await addMoreToCart(id, validProducts);
+                await addProducts(id, validProducts);
 
                 return bot.sendMessage(id, 'Los productos fueron agregados al carrito con éxito. ✅\n\n<i>¿En qué otra cosa te puedo ayudar?</i>', { replyMarkup , parseMode: 'html'});
 
