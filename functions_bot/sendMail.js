@@ -60,5 +60,4 @@ async function sendMail(userId) {
 
 }
 
-
 module.exports = sendMail;
