@@ -13,7 +13,6 @@ async function viewCart(userId) {
         let msg = ``;
         let total = 0;
 
-
         let i = 0;
         let len = cart[0].products.length;
        
