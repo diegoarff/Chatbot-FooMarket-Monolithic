@@ -1,6 +1,6 @@
 const { API_DB, ENDPOINTS_CARTS } = require('../config/instance');
 
-async function addMoreToCart(userId, userProducts) {
+async function addProducts(userId, userProducts) {
 
     try {
         
@@ -60,4 +60,4 @@ async function addMoreToCart(userId, userProducts) {
 
 };
 
-module.exports = addMoreToCart;
+module.exports = addProducts;
