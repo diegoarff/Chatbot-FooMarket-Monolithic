@@ -18,6 +18,7 @@ const getInfoProducts = require('./functions_bot/getInfoProducts');
 const sendMail = require('./functions_bot/sendMail');
 const viewCart = require('./functions_bot/viewCart');
 const validateDetails = require('./functions_bot/validateDetails');
+const getInfoProductsByCategory = require('./functions_bot/getInfoProductsByCategory');
 const deleteProducts = require('./functions_bot/deleteProducts');
 
 let TOKEN = process.env.TOKEN_TELEGRAM;
@@ -52,7 +53,7 @@ bot.on('/showProducts', function (msg) {
 
     //Define los botones a mostrar al final de la lista
     let replyMarkup = bot.inlineKeyboard([
-        [btn('Buscar producto', { callback: '/searchProduct' })],
+        [btn('Buscar producto', { callback: '/searchProduct' }), btn('Filtrar Productos', { callback: '/filterProduct' })],
         [btn('Agregar productos al carrito', { callback: '/cart' })],
         [btn('Volver al menu', { callback: '/menu' })]
     ]);
@@ -73,6 +74,139 @@ bot.on('/showProducts', function (msg) {
     } products()
 });
 
+//filtrar los productos por categorías
+
+bot.on ('/filterProduct',function (msg){
+    
+    //Define los botones a mostrar al final de la lista
+    let replyMarkup = bot.inlineKeyboard([
+        [btn('Electrónica', { callback: '/electronicsProduct' }), btn('Joyería', { callback: '/jeweleryProduct' })],
+        [btn('Ropa para damas', { callback: '/womenProducts' }), btn('Ropa para caballeros', { callback: '/menProduct' })],
+        [btn('Volver al menu', { callback: '/menu' })]
+    ]);
+
+    let id = msg.from.id;
+
+    //Muestra el mensaje al usuario junto a los botones definidos
+    return bot.sendMessage(id, `<b>Filtra los productos por su categoría 🛍️</b>\n\n¿Estás buscando los productos de alguna categoría en específico?\n\nSelecciona alguna de las siguientes categorías para ver los productos:`, { parseMode: 'html', replyMarkup });
+
+});
+
+//PRODUCTOS CATEGORÍA ELECTRÓNICA
+
+bot.on('/electronicsProduct', function (msg) {
+
+    let replyMarkup = bot.inlineKeyboard([
+        [btn('Buscar otros productos', { callback: '/searchProduct' })],
+        [btn('Agregar productos al carrito', { callback: '/cart' })],
+        [btn('Volver al menu', { callback: '/menu' })]
+    ]);
+
+    let id = msg.from.id;
+
+
+    async function electronicsProducts() {
+
+        try {
+            let category = 'electronics'
+            let message = await getInfoProductsByCategory(category);
+
+            return bot.sendMessage(id, `<b>CATEGORÍA ELECTRÓNICA:📃</b>\n\n${message}`, { parseMode: 'html', replyMarkup });
+
+        } catch (error) {
+            log(error);
+        }
+
+    } electronicsProducts();
+
+});
+
+//PRODUCTOS CATEGORÍA JOYERÍA
+
+bot.on('/jeweleryProduct', function (msg) {
+
+    let replyMarkup = bot.inlineKeyboard([
+        [btn('Buscar otros producto', { callback: '/searchProduct' })],
+        [btn('Agregar productos al carrito', { callback: '/cart' })],
+        [btn('Volver al menu', { callback: '/menu' })]
+    ]);
+
+    let id = msg.from.id;
+
+
+    async function jeweleryProducts() {
+
+        try {
+            let category = 'jewelery'
+            let message = await getInfoProductsByCategory(category);
+
+            return bot.sendMessage(id, `<b>CATEGORÍA JOYERÍA</b>\n\n${message}`, { parseMode: 'html', replyMarkup });
+
+        } catch (error) {
+            log(error);
+        }
+
+    } jeweleryProducts();
+
+});
+
+//PRODUCTOS CATEGORÍA ropa para damas
+
+bot.on('/womenProducts', function (msg) {
+
+    let replyMarkup = bot.inlineKeyboard([
+        [btn('Buscar otros producto', { callback: '/searchProduct' })],
+        [btn('Agregar productos al carrito', { callback: '/cart' })],
+        [btn('Volver al menu', { callback: '/menu' })]
+    ]);
+
+    let id = msg.from.id;
+
+
+    async function womanProducts() {
+
+        try {
+            let category = "women's clothing"
+            let message = await getInfoProductsByCategory(category);
+
+            return bot.sendMessage(id, `<b>CATEGORÍA ROPA PARA DAMAS</b>\n\n${message}`, { parseMode: 'html', replyMarkup });
+
+        } catch (error) {
+            log(error);
+        }
+
+    } womanProducts();
+
+});
+
+//PRODUCTOS CATEGORÍA ropa para caballeros
+
+bot.on('/menProduct', function (msg) {
+
+    let replyMarkup = bot.inlineKeyboard([
+        [btn('Buscar otros producto', { callback: '/searchProduct' })],
+        [btn('Agregar productos al carrito', { callback: '/cart' })],
+        [btn('Volver al menu', { callback: '/menu' })]
+    ]);
+
+    let id = msg.from.id;
+
+
+    async function menProducts() {
+
+        try {
+            let category = "men's clothing"
+            let message = await getInfoProductsByCategory(category);
+
+            return bot.sendMessage(id, `<b>CATEGORÍA ROPA PARA CABALLEROS</b>\n\n${message}`, { parseMode: 'html', replyMarkup });
+
+        } catch (error) {
+            log(error);
+        }
+
+    } menProducts();
+
+});
 
 //BUSCAR INFORMACIÓN DE UN PRODUCTO
 
