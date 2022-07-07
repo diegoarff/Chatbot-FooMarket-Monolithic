@@ -605,7 +605,7 @@ bot.on('ask.userDetails', function (msg) {
                         title: __('title_payment'),
                         description: __('descrip'),
                         payload: 'telebot-test-invoice',
-                        providerToken: '284685063:TEST:MzFiODlkYTJjNDVl',
+                        providerToken: '284685063:TEST:YWNhMGM4ZmYzNmQy',
                         startParameter: 'pay',
                         currency: 'USD',
                         prices: [ { label: __('prices_payment'), amount: total_amount } ],
