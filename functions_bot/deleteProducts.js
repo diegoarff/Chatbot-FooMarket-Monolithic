@@ -1,4 +1,4 @@
-const { API_DB, ENDPOINTS_CARTS } = require('../config/instance');
+const { API_DB, ENDPOINTS_CARTS } = require('~inst');
 
 async function deleteProducts(userId, userProducts) {
 
@@ -15,24 +15,23 @@ async function deleteProducts(userId, userProducts) {
         //Crea un array de los id de los productos existentes en el carrito
         arr = cart[0].products.map(e => {return e.productId})
 
-
+        //Remueve los ids repetidos de los productos nuevos ingresados por el usuario
         let filteredUP = userProducts.filter((e, idx) => {
             return userProducts.indexOf(e) == idx;
         })
 
-        //En caso de que el mensaje del usuario tenga ids de productos repetidos, los quita y devuelve los originales
-        //Ej: 
-        //Usuario ingresa: [1, 1, 2, 3, 2, 9, 9]
-        //
-        //filteredUP = [1, 2, 3, 9]
+        //Si en los productos ingresados por el usuario hay un id
+        //que no se encuentra en el carrito, devuelve true
+        let areNotInCart = filteredUP.some(e => !arr.includes(e));
 
-        //Devuelve los ids diferentes entre los dos arrays
-        filteredUP = filteredUP.filter(e => arr.includes(e));
+        if(areNotInCart) {
+            return false;
+        } else {
 
-        await API_DB.put(ENDPOINTS_CARTS.DELETE_CART_PRODUCTS+`?userId=${ userId }`, filteredUP);
+            await API_DB.put(ENDPOINTS_CARTS.DELETE_CART_PRODUCTS+`?userId=${ userId }`, filteredUP);
 
-        return console.log('Productos eliminados con éxito');
-
+            return true;
+        }
     } catch (err) {
         console.log(err);
     }

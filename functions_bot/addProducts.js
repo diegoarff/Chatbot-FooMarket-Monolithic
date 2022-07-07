@@ -1,4 +1,4 @@
-const { API_DB, ENDPOINTS_CARTS } = require('../config/instance');
+const { API_DB, ENDPOINTS_CARTS } = require('~inst');
 
 async function addProducts(userId, userProducts) {
 
