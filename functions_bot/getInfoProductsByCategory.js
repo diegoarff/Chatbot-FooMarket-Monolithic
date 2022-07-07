@@ -1,4 +1,4 @@
-const { API_DB, ENDPOINTS_PRODUCTS } = require('../config/instance');
+const { API_DB, ENDPOINTS_PRODUCTS } = require('~inst');
 
 async function getInfoProductsByCategory(category) {
 

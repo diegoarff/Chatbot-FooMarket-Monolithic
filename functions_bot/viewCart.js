@@ -1,4 +1,4 @@
-let { API_DB, ENDPOINTS_CARTS, ENDPOINTS_PRODUCTS } = require('../config/instance');
+let { API_DB, ENDPOINTS_CARTS, ENDPOINTS_PRODUCTS } = require('~inst');
 
 async function viewCart(userId) {
 
@@ -29,14 +29,16 @@ async function viewCart(userId) {
             //recordando que el index de un producto en la base de datos es su id - 1
             dataProduct = products[cartProduct.productId - 1];
 
-            msg += `> Id: ${cartProduct.productId}\n  Nombre: ${dataProduct.name}\n  Precio: $${dataProduct.price}\n  Cantidad: ${cartProduct.quantity}\n\n`
+            msg += `🔑 ID: ${cartProduct.productId}\n🖋 Name: ${dataProduct.name}\n🏷 Price: $${dataProduct.price}\n📦 Quantity: ${cartProduct.quantity}\n\n`
             total += (dataProduct.price * cartProduct.quantity);
 
         }
 
+        total = total.toFixed(2);
+
         await API_DB.put(ENDPOINTS_CARTS.PUT_TOTAL_AMOUNT+`?userId=${ userId }&total=${ total }`);
 
-        return `${ msg }Cantidad total a pagar: $${ total }`;
+        return `${ msg }Total amount: $${ total }`;
 
     } catch (err) {
         console.log(err);

@@ -1,26 +1,28 @@
-const { API_DB, ENDPOINTS_CARTS } = require("../config/instance");
+const { API_DB, ENDPOINTS_CARTS } = require("~inst");
 
-async function createCart (userId) {
+async function createCart(userId) {
 
   try {
-    
+
     //Busca el carrito del usuario
-    let res = await API_DB.get(ENDPOINTS_CARTS.GET_CART+`?userId=${ userId }`);
+    let res = await API_DB.get(ENDPOINTS_CARTS.GET_CART + `?userId=${userId}`);
 
     let cart = res.data;
 
     //Si el usuario no tiene carrito, el array vendrá vacío
-    if(cart.length == 0) {
-        
-        await API_DB.post(ENDPOINTS_CARTS.POST_CART+`?userId=${ userId }`)
+    if (cart.length == 0) {
 
-        return console.log('El carrito fue creado');
+      await API_DB.post(ENDPOINTS_CARTS.POST_CART + `?userId=${userId}`)
+
+      return console.log('Cart created!');
     } else {
 
-        return console.log('Ya existe el carrito');
-    }  
+      return console.log('You already have a cart!');
+    }
 
-  } catch (err) {
+  }
+
+  catch (err) {
     console.log(err);
   }
 }

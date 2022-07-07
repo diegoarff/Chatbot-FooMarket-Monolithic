@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "postinstall": "link-module-alias"
   },
   "keywords": [],
   "author": "",
@@ -12,11 +13,19 @@
   "dependencies": {
     "axios": "^0.27.2",
     "dotenv": "^16.0.1",
+    "i18n": "^0.15.0",
+    "link-module-alias": "^1.2.0",
     "nodemailer": "^6.7.6",
     "telebot": "^1.4.1",
     "yup": "^0.32.11"
   },
   "engines": {
     "node": ">=0.10.3 <15"
+  },
+  "_moduleAliases": {
+    "~inst": "./config/instance.js",
+    "~db": "./config/database.js",
+    "~f": "./functions_bot/",
+    "~utils": "./utils/utils.js"
   }
 }
