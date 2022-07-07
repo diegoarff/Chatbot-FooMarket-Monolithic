@@ -22,8 +22,8 @@ async function sendMail(userId) {
             port: 587,
             secure: false, 
             auth: {
-                user: 'equipo7socialoplesk@gmail.com', 
-                pass: 'otggpxhtyarvecmg', 
+                user: 'equipo6socialoplesk@gmail.com', 
+                pass: 'neywudyfdhnbydyd', 
             },
         });
     
@@ -37,8 +37,8 @@ async function sendMail(userId) {
         let subject = __('emailSubject');
 
         let info = await transporter.sendMail({
-            from: '"Foo Market 6" <equipo7socialoplesk@gmail.com>', 
-            to: `${email}, equipo7socialoplesk@gmail.com`, 
+            from: '"Foo Market 6" <equipo6socialoplesk@gmail.com>', 
+            to: `${email}, equipo6socialoplesk@gmail.com`, 
             subject: `${subject}`, 
             text: `${message}`
             },
