@@ -62,5 +62,7 @@
     "delProductInvalid": "❌ El valor ingresado no es válido. Por favor, intente de nuevo!",
     "delProduct": "Los productos %s fueron eliminados exitosamente. 📤\n\n<i>¿Qué otra cosa puedo hacer por ti? 🤖</i>",
     "searchResults":"<b>Mostrando resultados:</b>\n\n<b>🔑 ID</b>: %s\n\n<b>🖋 Nombre</b>: %s\n\n<b>🏷 Precio</b>: $%s\n\n<b>🗄 Categoría</b>: %s\n\n<b>📃 Descripción</b>: %s\n\n%s",
-    "delProductNotInCart":"❌ Introdujiste productos que no están en tu carrito! Por favor, inténtalo de nuevo."
+    "delProductNotInCart":"❌ Introdujiste productos que no están en tu carrito! Por favor, inténtalo de nuevo.",
+    "sendMailText":"Gracias por comprar en Foo Market 6!\nAquí tiene su factura:\n\n> Fecha: %s\n> Nombre: %s\n> Apellido: %s\n> Ubicación: %s\n> Forma de pago: %s\n\n> Productos:\n\n%s",
+    "emailSubject":"Tu factura de compra en Foo Market 6! ✔"
 }
