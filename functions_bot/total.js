@@ -1,4 +1,3 @@
-
 let { API_DB, ENDPOINTS_CARTS } = require('~inst');
 
 async function total(userId) {
