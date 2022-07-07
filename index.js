@@ -644,8 +644,6 @@ bot.on('ask.userDetails', function (msg) {
         }
 
     }userDetails();
-
-   
     
 });
 
